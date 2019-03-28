@@ -9,7 +9,7 @@ app_install_explorer()
     heading "Installing Explorer to '$EXPLORER_PATH'..."
 
     rm -rf "$EXPLORER_PATH"
-    git clone https://github.com/ArkEcosystem/ark-explorer.git "$EXPLORER_PATH" && cd "$EXPLORER_PATH"
+    git clone https://github.com/laroue/explorer.git "$EXPLORER_PATH" && cd "$EXPLORER_PATH"
     yarn
     yarn add connect-history-api-fallback express
 
@@ -48,20 +48,20 @@ EOF
         if [ ! -z "$LICENSE_EMAIL" ]; then
             local LICENSE="$LICENSE <$LICENSE_EMAIL>"
         fi
-        sed -i -E "s/^(Copyright.+Ark Ecosystem.*)$/\1\n$LICENSE/g" "$EXPLORER_PATH/LICENSE"
+        sed -i -E "s/^(Copyright.+La Roue.*)$/\1\n$LICENSE/g" "$EXPLORER_PATH/LICENSE"
     fi
 
     if [[ "$GIT_EXPLORER_COMMIT" == "Y" ]]; then
         echo "Committing changes..."
         cd "$EXPLORER_PATH"
-        git config --global user.email "support@ark.io"
-        git config --global user.name "ARK Deployer"
-        git checkout -b chore/bridgechain-changes
+        git config --global user.email "ceo@ockham.consulting"
+        git config --global user.name "gitockham"
+        git checkout -b chore/blockchain-changes
         git add .
         git commit -m "chore: prepare new network config 🎉"
         if [[ "$GIT_EXPLORER_ORIGIN" != "" ]]; then
             git remote set-url origin "$GIT_EXPLORER_ORIGIN"
-            git push --set-upstream origin chore/bridgechain-changes || local CANT_PUSH="Y"
+            git push --set-upstream origin chore/blockchain-changes || local CANT_PUSH="Y"
             if [[ "$CANT_PUSH" == "Y" ]]; then
                 echo "Could not push Git changes to '$GIT_EXPLORER_ORIGIN'"
             fi

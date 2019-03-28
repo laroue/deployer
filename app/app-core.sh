@@ -6,12 +6,12 @@ app_install_core()
     install_dependencies
     app_uninstall_core "$@"
 
-    heading "Installing Core to $BRIDGECHAIN_PATH..."
+    heading "Installing Core to $BLOCKCHAIN_PATH..."
     cd ~
 
-    local CONFIG_PATH_MAINNET="$(cd ~ && pwd)/.bridgechain/mainnet/$CHAIN_NAME"
-    local CONFIG_PATH_DEVNET="$(cd ~ && pwd)/.bridgechain/devnet/$CHAIN_NAME"
-    local CONFIG_PATH_TESTNET="$(cd ~ && pwd)/.bridgechain/testnet/$CHAIN_NAME"
+    local CONFIG_PATH_MAINNET="$(cd ~ && pwd)/.blockchain/mainnet/$CHAIN_NAME"
+    local CONFIG_PATH_DEVNET="$(cd ~ && pwd)/.blockchain/devnet/$CHAIN_NAME"
+    local CONFIG_PATH_TESTNET="$(cd ~ && pwd)/.blockchain/testnet/$CHAIN_NAME"
 
     local MAINNET_PREFIX=$(sh -c "jq '.$MAINNET_PREFIX' $__dir/prefixes.json")
     if [[ -z "$MAINNET_PREFIX" ]]; then
@@ -88,8 +88,8 @@ app_install_core()
         sudo yarn
     fi
 
-    rm -rf "$CONFIG_PATH_MAINNET" "$CONFIG_PATH_DEVNET" "$CONFIG_PATH_TESTNET" "$BRIDGECHAIN_PATH"
-    git clone https://github.com/ArkEcosystem/core.git "$BRIDGECHAIN_PATH"
+    rm -rf "$CONFIG_PATH_MAINNET" "$CONFIG_PATH_DEVNET" "$CONFIG_PATH_TESTNET" "$BLOCKCHAIN_PATH"
+    git clone https://github.com/laroue/core.git "$BLOCKCHAIN_PATH"
 
     local EPOCH=$(__get_epoch)
 
@@ -100,7 +100,7 @@ app_install_core()
 
     ## Build Mainnet
     node "$ROOT_PATH/packages/js-deployer/bin/deployer" --configPath "$CONFIG_PATH_MAINNET" \
-                                          --corePath "$BRIDGECHAIN_PATH" \
+                                          --corePath "$BLOCKCHAIN_PATH" \
                                           --overwriteConfig \
                                           --network "mainnet" \
                                           --name "$CHAIN_NAME" \
@@ -145,7 +145,7 @@ app_install_core()
 
     ## Build Devnet
     node "$ROOT_PATH/packages/js-deployer/bin/deployer" --configPath "$CONFIG_PATH_DEVNET" \
-                                          --corePath "$BRIDGECHAIN_PATH" \
+                                          --corePath "$BLOCKCHAIN_PATH" \
                                           --overwriteConfig \
                                           --network "devnet" \
                                           --name "$CHAIN_NAME" \
@@ -190,7 +190,7 @@ app_install_core()
 
     ## Build Testnet
     node "$ROOT_PATH/packages/js-deployer/bin/deployer" --configPath "$CONFIG_PATH_TESTNET" \
-                                          --corePath "$BRIDGECHAIN_PATH" \
+                                          --corePath "$BLOCKCHAIN_PATH" \
                                           --overwriteConfig \
                                           --network "testnet" \
                                           --name "$CHAIN_NAME" \
@@ -232,16 +232,16 @@ app_install_core()
                                           --transactionsPerBlock "$TXS_PER_BLOCK" \
                                           --totalPremine "$TOTAL_PREMINE"
 
-    rm -rf "$BRIDGECHAIN_PATH"/packages/core/bin/config/{mainnet,devnet,testnet}/
-    rm -rf "$BRIDGECHAIN_PATH"/packages/crypto/src/networks/{mainnet,devnet,testnet}/
+    rm -rf "$BLOCKCHAIN_PATH"/packages/core/bin/config/{mainnet,devnet,testnet}/
+    rm -rf "$BLOCKCHAIN_PATH"/packages/crypto/src/networks/{mainnet,devnet,testnet}/
 
-    cp -R "$CONFIG_PATH_MAINNET/core" "$BRIDGECHAIN_PATH/packages/core/bin/config/mainnet"
-    cp -R "$CONFIG_PATH_MAINNET/crypto" "$BRIDGECHAIN_PATH/packages/crypto/src/networks/mainnet"
-    cp -R "$CONFIG_PATH_DEVNET/core" "$BRIDGECHAIN_PATH/packages/core/bin/config/devnet"
-    cp -R "$CONFIG_PATH_DEVNET/crypto" "$BRIDGECHAIN_PATH/packages/crypto/src/networks/devnet"
-    cp -R "$CONFIG_PATH_TESTNET/core" "$BRIDGECHAIN_PATH/packages/core/bin/config/testnet"
-    cp -R "$CONFIG_PATH_TESTNET/crypto" "$BRIDGECHAIN_PATH/packages/crypto/src/networks/testnet"
-    cp "$CONFIG_PATH_TESTNET/delegates.json" "$BRIDGECHAIN_PATH/packages/core/bin/config/testnet/"
+    cp -R "$CONFIG_PATH_MAINNET/core" "$BLOCKCHAIN_PATH/packages/core/bin/config/mainnet"
+    cp -R "$CONFIG_PATH_MAINNET/crypto" "$BLOCKCHAIN_PATH/packages/crypto/src/networks/mainnet"
+    cp -R "$CONFIG_PATH_DEVNET/core" "$BLOCKCHAIN_PATH/packages/core/bin/config/devnet"
+    cp -R "$CONFIG_PATH_DEVNET/crypto" "$BLOCKCHAIN_PATH/packages/crypto/src/networks/devnet"
+    cp -R "$CONFIG_PATH_TESTNET/core" "$BLOCKCHAIN_PATH/packages/core/bin/config/testnet"
+    cp -R "$CONFIG_PATH_TESTNET/crypto" "$BLOCKCHAIN_PATH/packages/crypto/src/networks/testnet"
+    cp "$CONFIG_PATH_TESTNET/delegates.json" "$BLOCKCHAIN_PATH/packages/core/bin/config/testnet/"
 
     if [ ! -z "$LICENSE_NAME" ]; then
         local YEAR=$(date +"%-Y")
@@ -249,20 +249,20 @@ app_install_core()
         if [ ! -z "$LICENSE_EMAIL" ]; then
             local LICENSE="$LICENSE <$LICENSE_EMAIL>"
         fi
-        sed -i -E "s/^(Copyright.+Ark Ecosystem.*)$/\1\n$LICENSE/g" "$BRIDGECHAIN_PATH/LICENSE"
+        sed -i -E "s/^(Copyright.+La Roue.*)$/\1\n$LICENSE/g" "$BLOCKCHAIN_PATH/LICENSE"
     fi
 
     if [[ "$GIT_CORE_COMMIT" == "Y" ]]; then
         echo "Committing changes..."
-        cd "$BRIDGECHAIN_PATH"
-        git config --global user.email "support@ark.io"
-        git config --global user.name "ARK Deployer"
-        git checkout -b chore/bridgechain-changes
+        cd "$BLOCKCHAIN_PATH"
+        git config --global user.email "ceo@ockham.consulting"
+        git config --global user.name "gitockham"
+        git checkout -b chore/blockchain-changes
         git add .
         git commit -m "chore: prepare new network config 🎉"
         if [[ "$GIT_CORE_ORIGIN" != "" ]]; then
             git remote set-url origin "$GIT_CORE_ORIGIN"
-            git push --set-upstream origin chore/bridgechain-changes || local CANT_PUSH="Y"
+            git push --set-upstream origin chore/blockchain-changes || local CANT_PUSH="Y"
             if [[ "$CANT_PUSH" == "Y" ]]; then
                 error "Could not push Git changes to '$GIT_CORE_ORIGIN'"
             fi
@@ -273,7 +273,7 @@ app_install_core()
 
     __yarn_setup
 
-    cd "$BRIDGECHAIN_PATH/packages/core/"
+    cd "$BLOCKCHAIN_PATH/packages/core/"
     ./bin/run config:cli --token "$CHAIN_NAME"
 
     local PASSPHRASE=$(sh -c "jq '.passphrase' $CONFIG_PATH_MAINNET/genesisWallet.json")
@@ -308,10 +308,10 @@ app_install_core()
     echo ""
     echo "You can find the genesis wallet passphrase in '$CONFIG_PATH_TESTNET/genesisWallet.json'"
     echo "You can find the delegates.json passphrase file at '$CONFIG_PATH_TESTNET/delegates.json'"
-    echo "or '$BRIDGECHAIN_PATH/packages/core/bin/config/testnet/delegates.json'"
+    echo "or '$BLOCKCHAIN_PATH/packages/core/bin/config/testnet/delegates.json'"
     echo "------------------------------------"
 
-    success "Bridgechain Installed!"
+    success "Blockchain Installed!"
 }
 
 app_uninstall_core()
@@ -324,7 +324,7 @@ app_uninstall_core()
         pm2 delete "$CHAIN_NAME-forger" &>/dev/null || true
     fi
 
-    rm -rf "$BRIDGECHAIN_PATH"
+    rm -rf "$BLOCKCHAIN_PATH"
 
     success "Uninstall OK!"
 }
@@ -344,7 +344,7 @@ __get_epoch()
 __yarn_setup()
 {
     if [[ "$1" != "1" ]]; then
-        cd "$BRIDGECHAIN_PATH"
+        cd "$BLOCKCHAIN_PATH"
     else
         error "Yarn setup failed. Trying again..."
     fi

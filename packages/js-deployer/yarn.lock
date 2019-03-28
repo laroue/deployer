@@ -2,9 +2,9 @@
 # yarn lockfile v1
 
 
-"@arkecosystem/crypto@~0.2":
+"@laroue/crypto@~0.2":
   version "0.2.6"
-  resolved "https://registry.yarnpkg.com/@arkecosystem/crypto/-/crypto-0.2.6.tgz#6f1d435fe8bec4ed2b80220dcdc5ccf9087df4c7"
+  resolved "https://registry.yarnpkg.com/@laroue/crypto/-/crypto-0.2.6.tgz#6f1d435fe8bec4ed2b80220dcdc5ccf9087df4c7"
   integrity sha512-L96Abkn/7M6urMkA9jnDx9Fq4oSQz1a1oEd/gxkueBUPWGzm/UCGXRYMG49wOMQRcLuGcqw4zmDZqmbai7exVw==
   dependencies:
     bignumber.js "^8.0.1"

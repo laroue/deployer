@@ -172,8 +172,8 @@ parse_json_config()
                 "rewardPerBlock")
                     REWARD_PER_BLOCK=$(jq -r '.rewardPerBlock' "$CONFIG")
                 ;;
-                "bridgechainPath")
-                    BRIDGECHAIN_PATH=$(jq -r '.bridgechainPath' "$CONFIG")
+                "blockchainPath")
+                    BLOCKCHAIN_PATH=$(jq -r '.blockchainPath' "$CONFIG")
                 ;;
                 "explorerPath")
                     EXPLORER_PATH=$(jq -r '.explorerPath' "$CONFIG")
@@ -322,7 +322,7 @@ parse_core_args()
     while [[ $# -ne 0 ]] ; do
         case "$1" in
             "--path")
-                BRIDGECHAIN_PATH="$2"
+                BLOCKCHAIN_PATH="$2"
             ;;
             "--database")
                 DATABASE_NAME="$2"

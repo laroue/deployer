@@ -6,18 +6,18 @@ process_core_start()
 
     heading "Starting..."
     parse_core_args "$@"
-    if [ ! -d "$BRIDGECHAIN_PATH/packages/core" ]; then
-        error "Bridgechain path could not be found. Use '--path' to specify the location it was installed."
+    if [ ! -d "$BLOCKCHAIN_PATH/packages/core" ]; then
+        error "Blockchain path could not be found. Use '--path' to specify the location it was installed."
 
         return
     fi
 
-    cd "$BRIDGECHAIN_PATH/packages/core"
+    cd "$BLOCKCHAIN_PATH/packages/core"
     local NETWORK=$(echo "$NETWORK" | awk '{print tolower($0)}')
 
     if [ -z "$NETWORK" ]; then
         abort 1 "Network must be specified"
-    elif [ ! -d "$BRIDGECHAIN_PATH/packages/core/bin/config/$NETWORK" ]; then
+    elif [ ! -d "$BLOCKCHAIN_PATH/packages/core/bin/config/$NETWORK" ]; then
         abort 1 "Network '$NETWORK' does not exist"
     fi
 
@@ -63,7 +63,7 @@ __core_start() {
 
 __core_check_last_height() {
     local CONFIG_PATH="$1"
-    local DATABASE_NAME=$(cat "$BRIDGECHAIN_PATH/packages/core/bin/config/$NETWORK/.env" | fgrep 'CORE_DB_DATABASE=' | awk -F'=' '{print $2}')
+    local DATABASE_NAME=$(cat "$BLOCKCHAIN_PATH/packages/core/bin/config/$NETWORK/.env" | fgrep 'CORE_DB_DATABASE=' | awk -F'=' '{print $2}')
     sudo -u postgres psql -qtAX -d "$DATABASE_NAME" -c "SELECT height FROM blocks ORDER BY height DESC LIMIT 1" 2>/dev/null || echo 0
 }
 
@@ -71,14 +71,14 @@ process_core_stop()
 {
     heading "Stopping..."
     parse_core_args "$@"
-    if [ -d "$BRIDGECHAIN_PATH/packages/core" ]; then
-        cd "$BRIDGECHAIN_PATH/packages/core"
+    if [ -d "$BLOCKCHAIN_PATH/packages/core" ]; then
+        cd "$BLOCKCHAIN_PATH/packages/core"
 
         local NETWORK=$(echo "$NETWORK" | awk '{print tolower($0)}')
 
         if [ -z "$NETWORK" ]; then
             abort 1 "Network must be specified"
-        elif [ ! -d "$BRIDGECHAIN_PATH/packages/core/bin/config/$NETWORK" ]; then
+        elif [ ! -d "$BLOCKCHAIN_PATH/packages/core/bin/config/$NETWORK" ]; then
             abort 1 "Network '$NETWORK' does not exist"
         fi
 

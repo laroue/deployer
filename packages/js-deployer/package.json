@@ -1,19 +1,19 @@
 {
-  "name": "@arkecosystem/core-deployer",
-  "description": "Deployer for ARK Core",
+  "name": "@laroue/deployer",
+  "description": "Blockchain Deployer",
   "version": "0.2.0",
   "contributors": [
-    "Alex Barnsley <alex@ark.io>"
+    "Luc Talarico <lta@laroue.org>"
   ],
   "license": "MIT",
   "bin": {
-    "ark:deployer": "./bin/deployer"
+    "mlc:deployer": "./bin/deployer"
   },
   "scripts": {
     "start": "./bin/deployer"
   },
   "dependencies": {
-    "@arkecosystem/crypto": "~0.2",
+    "@laroue/crypto": "~0.2",
     "bip39": "^2.5.0",
     "bytebuffer": "^5.0.1",
     "commander": "^2.19.0",

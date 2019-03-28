@@ -1,9 +1,9 @@
 #!/usr/bin/env bash
 
 ROOT_PATH=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" >/dev/null 2>&1 && pwd)
-BRIDGECHAIN_PATH="/home/$USER/core-bridgechain"
-EXPLORER_PATH="/home/$USER/core-explorer"
-CHAIN_NAME="bridgechain"
+BLOCKCHAIN_PATH="/home/$USER/core"
+EXPLORER_PATH="/home/$USER/explorer"
+CHAIN_NAME="blockchain"
 DATABASE_HOST="localhost"
 DATABASE_PORT="5432"
 DATABASE_NAME="core_$CHAIN_NAME"
@@ -61,13 +61,13 @@ BLOCK_TIME=8
 TXS_PER_BLOCK=150
 
 ## Total Premined Tokens
-TOTAL_PREMINE=2100000000000000
+TOTAL_PREMINE=2500000000000000
 
 ## Rewards
 ## Start Block Height
 REWARD_HEIGHT_START=75600
 
-## ARK reward per Block
+## Reward per Block
 REWARD_PER_BLOCK=200000000
 
 ## Flag to indicate if args has been processed
@@ -83,9 +83,9 @@ NETWORK=""
 
 ## Git
 GIT_CORE_COMMIT="N"
-GIT_CORE_ORIGIN=""
+GIT_CORE_ORIGIN="https://github.com/laroue/core.git"
 GIT_EXPLORER_COMMIT="N"
-GIT_EXPLORER_ORIGIN=""
+GIT_EXPLORER_ORIGIN="https://github.com/laroue/explorer.git"
 
 ## License
 LICENSE_NAME=""
